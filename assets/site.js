@@ -12,6 +12,11 @@
   var LINK_RE = /(?:shorts\/|youtu\.be\/|[?&]v=|\/embed\/|\/live\/)([A-Za-z0-9_-]{11})/;
   var TARGET_RE = /^https:\/\/youtu\.be\/[A-Za-z0-9_-]{11}\?t=\d{1,6}$/;
   var CODE_RE = /^[a-z0-9-]{2,40}$/;
+  // Phones: Android/iOS only hand a link to the YouTube app when the link itself is TAPPED.
+  // A redirect a moment later stays in the browser (in-app browsers show a black player),
+  // so on phones we never auto-redirect — the user taps a real link instead.
+  var PHONE = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent || "") ||
+              (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 
   var data = null, byId = {}, byLower = {}, filter = "";
   var $ = function (id) { return document.getElementById(id); };
@@ -124,10 +129,20 @@
   function go(clip, how) {
     var links = targetOf(clip);
     if (!links) { showResult("miss", "That clip's original link looks broken.", ""); return; }
+    var label = (clip.source_title || clip.title || "") + (clip.creator ? " — " + clip.creator : "");
+    if (PHONE) {
+      mood("excited", "Found it! Tap the button to open YouTube.");
+      showResult("ok", "Found it!", label, links);
+      var btn = $("result").querySelector(".btn.main");
+      if (btn) {
+        btn.addEventListener("click", function () { count("go/" + clip.s, true, clip.title); });
+        btn.scrollIntoView({ block: "center", behavior: "smooth" });
+      }
+      return;
+    }
     count("go/" + clip.s, true, clip.title);
-    mood("excited", links.app ? "Found it! Opening YouTube…" : "Found it! Taking you there…");
-    showResult("ok", "Found it!", (clip.source_title || clip.title || "") +
-      (clip.creator ? " — " + clip.creator : ""), links);
+    mood("excited", "Found it! Taking you there…");
+    showResult("ok", "Found it!", label, links);
     setTimeout(function () { openOriginal(links); }, how === "auto" ? 350 : 700);
   }
 
@@ -205,9 +220,18 @@
       var meta = document.createElement("div"); meta.className = "meta";
       var t = document.createElement("div"); t.className = "t"; t.textContent = c.title || "Clip";
       var cr = document.createElement("div"); cr.className = "c"; cr.textContent = c.creator || "";
-      var b = document.createElement("button"); b.type = "button"; b.className = "btn small";
+      var b;
+      var lk = targetOf(c);
+      if (PHONE && lk) {
+        // a real link: the tap itself opens the YouTube app
+        b = document.createElement("a"); b.className = "btn small"; b.rel = "noopener";
+        b.href = lk.app || lk.web;
+        b.addEventListener("click", function () { count("go/" + c.s, true, c.title); });
+      } else {
+        b = document.createElement("button"); b.type = "button"; b.className = "btn small";
+        b.addEventListener("click", function () { go(c, "click"); window.scrollTo({ top: 0, behavior: "smooth" }); });
+      }
       b.textContent = "Watch original ▶";
-      b.addEventListener("click", function () { go(c, "click"); window.scrollTo({ top: 0, behavior: "smooth" }); });
       meta.appendChild(t); if (c.creator) meta.appendChild(cr); meta.appendChild(b);
       card.appendChild(th); card.appendChild(meta); list.appendChild(card);
     });

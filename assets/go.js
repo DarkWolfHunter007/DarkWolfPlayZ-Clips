@@ -58,7 +58,16 @@
     var m0 = target.match(/^https:\/\/youtu\.be\/([A-Za-z0-9_-]{11})\?t=(\d{1,6})$/);
     var links = appLinks(m0[1], m0[2]);
     var btn = document.querySelector(".go-page .btn");
-    if (btn && links.app) { btn.href = links.app; btn.textContent = "Open in YouTube ▶"; }
+    var phone = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent || "") ||
+                (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    if (btn) { btn.href = links.app || links.web; btn.textContent = "Open in YouTube ▶"; }
+    if (phone) {
+      // Phones only open the app from a real tap — wait for it (see site.js).
+      var h = document.querySelector(".go-page h1");
+      if (h) h.textContent = "Tap to watch the full video";
+      if (btn) btn.addEventListener("click", function () { count("go/" + id); });
+      return;
+    }
     count("go/" + id);
     setTimeout(function () { openOriginal(links); }, 250);
     return;
