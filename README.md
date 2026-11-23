@@ -1,4 +1,4 @@
-# DarkWolfPlayZ — full videos
+# Dark Wolf PlayZ — full videos
 
 This site is **generated automatically** by the channel's clip pipeline. Every file here is
 rebuilt and overwritten on each sync, so changes made directly in this repo don't stick.
