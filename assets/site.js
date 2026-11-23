@@ -151,6 +151,20 @@
     var t = Date.parse(at || "");
     return t && Date.now() - t < 36 * 3600 * 1000;
   }
+  function playShort(box, clip) {
+    if (!ID_RE.test(clip.s)) return;
+    count("play/" + clip.s, true, clip.title);
+    var f = document.createElement("iframe");
+    f.src = "https://www.youtube-nocookie.com/embed/" + clip.s + "?autoplay=1&playsinline=1&rel=0&modestbranding=1";
+    f.title = clip.title || "Short";
+    f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
+    f.setAttribute("allowfullscreen", "");
+    f.referrerPolicy = "strict-origin-when-cross-origin";
+    var wrap = document.createElement("div"); wrap.className = "thumb playing";
+    wrap.appendChild(f);
+    box.replaceWith(wrap);
+  }
+
   function renderFilters() {
     var box = $("filters"); box.textContent = "";
     var names = [];
@@ -173,11 +187,14 @@
     }
     items.forEach(function (c) {
       var card = document.createElement("article"); card.className = "clip";
-      var th = document.createElement("a"); th.className = "thumb";
-      th.href = "https://www.youtube.com/shorts/" + c.s; th.rel = "noopener";
-      th.setAttribute("aria-label", "Watch the Short");
+      // Thumbnail first; YouTube's player loads only when tapped (fast page, fewer cookies).
+      var th = document.createElement("button"); th.type = "button"; th.className = "thumb";
+      th.setAttribute("aria-label", "Play the Short");
       var img = document.createElement("img"); img.loading = "lazy"; img.alt = "";
       img.src = "https://i.ytimg.com/vi/" + c.s + "/hqdefault.jpg"; th.appendChild(img);
+      var play = document.createElement("span"); play.className = "play"; play.textContent = "▶";
+      th.appendChild(play);
+      th.addEventListener("click", function () { playShort(th, c); });
       if (isNew(c.at)) { var n = document.createElement("span"); n.className = "new"; n.textContent = "New"; th.appendChild(n); }
       var meta = document.createElement("div"); meta.className = "meta";
       var t = document.createElement("div"); t.className = "t"; t.textContent = c.title || "Clip";
@@ -195,7 +212,14 @@
     return fetch("clips.json?ts=" + Date.now(), { cache: "no-store" })
       .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
       .then(function (d) {
-        d.clips = (d.clips || []).filter(function (c) { return ID_RE.test(c.s) && ID_RE.test(c.o); });
+        var originals = d.originals || {};
+        d.clips = (d.clips || []).map(function (c) {
+          if (!c.short) return c;                        // v1 entry (old cached file)
+          var o = originals[c.original.id] || {};
+          return { s: c.short.id, title: c.short.title, at: c.short.posted,
+                   o: c.original.id, t: c.original.start,
+                   source_title: o.title || "", creator: o.creator || "" };
+        }).filter(function (c) { return ID_RE.test(c.s) && ID_RE.test(c.o); });
         data = d; byId = {}; byLower = {};
         d.clips.forEach(function (c) {
           byId[c.s] = c;
