@@ -1,6 +1,6 @@
 {
  "v": 2,
- "updated": "2026-11-23T07:26:12Z",
+ "updated": "2026-11-23T19:13:17Z",
  "channel": {
   "title": "Dark Wolf PlayZ",
   "url": "https://www.youtube.com/channel/UC2cCOweXSSb-o-y6JBDT1Xw",
@@ -8,97 +8,6 @@
  },
  "counter": "",
  "lead": 3,
- "originals": {
-  "zGyvqmxu6zo": {
-   "title": "Grand Theft Auto V, But I Forgot My Map At Home.",
-   "creator": "MooreOver"
-  },
-  "Ra6sNe8s2Hc": {
-   "title": "If You Steal a Car in GTA 6, I’ll Pay For It!",
-   "creator": "MrBeast Gaming"
-  },
-  "S_aWUO3gG5o": {
-   "title": "FAMILY GUY MOST OFFENSIVE JOKES (PART 2)",
-   "creator": ""
-  }
- },
- "clips": [
-  {
-   "short": {
-    "id": "zi-7iGsSDYw",
-    "title": "MooreOver's taxi driver pulls a gun 🚕",
-    "posted": "2026-11-23T05:43:44Z"
-   },
-   "original": {
-    "id": "zGyvqmxu6zo",
-    "start": 1480
-   }
-  },
-  {
-   "short": {
-    "id": "6qGUez8Z04E",
-    "title": "MooreOver tests a noob who just started GTA 5",
-    "posted": "2026-11-23T05:43:09Z"
-   },
-   "original": {
-    "id": "zGyvqmxu6zo",
-    "start": 973
-   }
-  },
-  {
-   "short": {
-    "id": "CGgEwsjxx2c",
-    "title": "MrBeast gets robbed by NPCs in GTA 6 🚗",
-    "posted": "2026-11-22T20:50:48Z"
-   },
-   "original": {
-    "id": "Ra6sNe8s2Hc",
-    "start": 212
-   }
-  },
-  {
-   "short": {
-    "id": "Fj-qc83CmyU",
-    "title": "\"And finding a way to succeed!\" 🔥 — MrBeast Gaming",
-    "posted": "2026-11-22T20:50:44Z"
-   },
-   "original": {
-    "id": "Ra6sNe8s2Hc",
-    "start": 1213
-   }
-  },
-  {
-   "short": {
-    "id": "stG7uT4X2Oo",
-    "title": "\"You only have a gun, no body armor!\" 👀 — MrBeast Gaming",
-    "posted": "2026-11-22T20:50:04Z"
-   },
-   "original": {
-    "id": "Ra6sNe8s2Hc",
-    "start": 1175
-   }
-  },
-  {
-   "short": {
-    "id": "B7GUtlQSyQU",
-    "title": "Family Guy's most outrageous joke goes too far 💀",
-    "posted": "2026-11-22T20:35:47Z"
-   },
-   "original": {
-    "id": "S_aWUO3gG5o",
-    "start": 50
-   }
-  },
-  {
-   "short": {
-    "id": "lrG_eNsrZww",
-    "title": "Family Guy's darkest ultrasound joke ever 💀",
-    "posted": "2026-11-22T20:35:38Z"
-   },
-   "original": {
-    "id": "S_aWUO3gG5o",
-    "start": 576
-   }
-  }
- ]
+ "originals": {},
+ "clips": []
 }
