@@ -75,6 +75,12 @@
     var ua = navigator.userAgent || "";
     var watch = "www.youtube.com/watch?v=" + id + "&t=" + t;
     if (/Android/i.test(ua)) {
+      // Only Chrome (and Chrome-based in-app tabs) handle intent:// links. Brave, Firefox,
+      // Samsung Internet & co. show an error page for them, so they get the normal YouTube
+      // link, which Android opens in the YouTube app (or the browser asks to).
+      var chrome = /Chrome\/\d/.test(ua) && !/EdgA|OPR|SamsungBrowser|Firefox|YaBrowser|DuckDuckGo|Vivaldi/i.test(ua)
+                   && !(navigator.brave && typeof navigator.brave.isBrave === "function");
+      if (!chrome) return { web: "https://www.youtube.com/watch?v=" + id + "&t=" + t + "s", app: null };
       return { web: web, app: "intent://" + watch + "#Intent;scheme=https;package=com.google.android.youtube;" +
                "S.browser_fallback_url=" + encodeURIComponent(web) + ";end" };
     }
