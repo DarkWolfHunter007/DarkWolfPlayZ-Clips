@@ -61,32 +61,68 @@
     var lead = Math.max(0, Math.min(60, parseInt(data.lead, 10) || 0));
     var t = Math.max(0, Math.floor(Number(clip.t) || 0) - lead);
     var url = "https://youtu.be/" + clip.o + "?t=" + t;
-    return TARGET_RE.test(url) ? url : null;
+    return TARGET_RE.test(url) ? appLinks(clip.o, t) : null;
   }
 
-  function showResult(kind, title, text, href) {
+  // ---- open in the YouTube APP, not the in-app/web browser --------------------------------
+  // Everyone here came from the YouTube app, so on phones we hand the video straight back to
+  // it: an Android intent (with the web link as Android's own fallback) or iOS's youtube://
+  // scheme. Only if the page is still showing a moment later (app missing / launch blocked)
+  // do we fall back to the normal web link. Links are rebuilt from a validated id + seconds.
+  function appLinks(id, t) {
+    var web = "https://youtu.be/" + id + "?t=" + t;
+    if (!/^[A-Za-z0-9_-]{11}$/.test(id) || !/^\d{1,6}$/.test(String(t))) return null;
+    var ua = navigator.userAgent || "";
+    var watch = "www.youtube.com/watch?v=" + id + "&t=" + t;
+    if (/Android/i.test(ua)) {
+      return { web: web, app: "intent://" + watch + "#Intent;scheme=https;package=com.google.android.youtube;" +
+               "S.browser_fallback_url=" + encodeURIComponent(web) + ";end" };
+    }
+    if (/iPhone|iPad|iPod/i.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)) {
+      return { web: web, app: "youtube://" + watch };
+    }
+    return { web: web, app: null };
+  }
+  function openOriginal(links) {
+    if (!links.app) { window.location.replace(links.web); return; }
+    var left = false;
+    var mark = function () { left = true; };
+    window.addEventListener("pagehide", mark);
+    window.addEventListener("blur", mark);            // iOS "Open in YouTube?" prompt
+    document.addEventListener("visibilitychange", function () { if (document.hidden) left = true; });
+    window.location.href = links.app;
+    setTimeout(function () { if (!left && !document.hidden) window.location.replace(links.web); }, 2500);
+  }
+
+  function showResult(kind, title, text, links) {
     var box = $("result");
     box.hidden = false;
     box.className = "result " + kind;
     box.textContent = "";
     var b = document.createElement("b"); b.textContent = title; box.appendChild(b);
     if (text) { var p = document.createElement("span"); p.textContent = text; box.appendChild(p); }
-    if (href) {
+    if (links) {
       var a = document.createElement("a");
-      a.className = "btn main"; a.href = href; a.rel = "noopener";
-      a.textContent = "Open the original ▶";
+      a.className = "btn main"; a.href = links.app || links.web; a.rel = "noopener";
+      a.textContent = links.app ? "Open in YouTube ▶" : "Open the original ▶";
       box.appendChild(document.createElement("br")); box.appendChild(a);
+      if (links.app) {
+        var w = document.createElement("a");
+        w.className = "alt"; w.href = links.web; w.rel = "noopener";
+        w.textContent = "or watch in the browser";
+        box.appendChild(w);
+      }
     }
   }
 
   function go(clip, how) {
-    var url = targetOf(clip);
-    if (!url) { showResult("miss", "That clip's original link looks broken.", ""); return; }
+    var links = targetOf(clip);
+    if (!links) { showResult("miss", "That clip's original link looks broken.", ""); return; }
     count("go/" + clip.s, true, clip.title);
-    mood("excited", "Found it! Taking you there…");
+    mood("excited", links.app ? "Found it! Opening YouTube…" : "Found it! Taking you there…");
     showResult("ok", "Found it!", (clip.source_title || clip.title || "") +
-      (clip.creator ? " — " + clip.creator : ""), url);
-    setTimeout(function () { window.location.replace(url); }, how === "auto" ? 350 : 700);
+      (clip.creator ? " — " + clip.creator : ""), links);
+    setTimeout(function () { openOriginal(links); }, how === "auto" ? 350 : 700);
   }
 
   function lookup(raw, how) {

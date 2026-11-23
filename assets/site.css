@@ -58,6 +58,7 @@ input:focus{outline:none;border-color:var(--accent)}
 .result.miss{border-color:#fbbf24}
 .result b{display:block;margin-bottom:4px}
 .result .btn{margin-top:10px;display:inline-block;text-decoration:none}
+.result .alt{display:block;margin-top:10px;font-size:13px;color:var(--muted)}
 
 .latest{margin-top:26px}
 .latest-head{display:flex;flex-direction:column;gap:10px;margin-bottom:12px}
