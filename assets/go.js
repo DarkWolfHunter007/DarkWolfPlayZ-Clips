@@ -54,6 +54,12 @@
   }
 
   var target = meta("go-target"), id = meta("go-id"), home = meta("go-home") || "../../";
+  // A Short's own page (/s/<id>/): show the full video on the main page, like a pasted link.
+  // (No JavaScript: the page's <noscript> refresh still goes straight to YouTube.)
+  if (target && TARGET_RE.test(target) && ID_RE.test(id) && !meta("go-direct")) {
+    window.location.replace(home + "?s=" + id);
+    return;
+  }
   if (target && TARGET_RE.test(target) && ID_RE.test(id)) {
     var m0 = target.match(/^https:\/\/youtu\.be\/([A-Za-z0-9_-]{11})\?t=(\d{1,6})$/);
     var links = appLinks(m0[1], m0[2]);
@@ -72,7 +78,18 @@
     setTimeout(function () { openOriginal(links); }, 250);
     return;
   }
-  // 404 page: /s/<id> that isn't generated yet -> let the main page look it up.
-  var m = window.location.pathname.match(/\/s\/([A-Za-z0-9_-]{11})\/?$/);
-  if (m) window.location.replace(home + "?s=" + m[1]);
+  // 404 page. Two ways land here:
+  //  * /s/<id> that isn't generated yet;
+  //  * a Short's link pasted right after the website's address, e.g.
+  //    <site>/https://youtube.com/shorts/<id>?si=…  or  <site>/<id>
+  // Either way: hand the Short's id to the main page, which finds the full video.
+  // Only an 11-character id is passed on — the rest of the address is ignored.
+  var LINK_RE = /(?:shorts\/|youtu\.be\/|[?&]v=|\/embed\/|\/live\/|\/s\/)([A-Za-z0-9_-]{11})(?![A-Za-z0-9_-])/;
+  var here = "";
+  try { here = decodeURIComponent(window.location.pathname + window.location.search + window.location.hash); }
+  catch (e) { here = window.location.pathname + window.location.search + window.location.hash; }
+  var m = here.match(LINK_RE);
+  var last = window.location.pathname.replace(/\/+$/, "").split("/").pop();
+  var sid = m ? m[1] : (ID_RE.test(last || "") ? last : "");
+  if (sid) window.location.replace(home + "?s=" + sid);
 })();

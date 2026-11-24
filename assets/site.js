@@ -85,14 +85,14 @@
       // link, which Android opens in the YouTube app (or the browser asks to).
       var chrome = /Chrome\/\d/.test(ua) && !/EdgA|OPR|SamsungBrowser|Firefox|YaBrowser|DuckDuckGo|Vivaldi/i.test(ua)
                    && !(navigator.brave && typeof navigator.brave.isBrave === "function");
-      if (!chrome) return { web: "https://www.youtube.com/watch?v=" + id + "&t=" + t + "s", app: null };
+      if (!chrome) return { web: "https://www.youtube.com/watch?v=" + id + "&t=" + t + "s", app: null, t: t };
       return { web: web, app: "intent://" + watch + "#Intent;scheme=https;package=com.google.android.youtube;" +
-               "S.browser_fallback_url=" + encodeURIComponent(web) + ";end" };
+               "S.browser_fallback_url=" + encodeURIComponent(web) + ";end", t: t };
     }
     if (/iPhone|iPad|iPod/i.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)) {
-      return { web: web, app: "youtube://" + watch };
+      return { web: web, app: "youtube://" + watch, t: t };
     }
-    return { web: web, app: null };
+    return { web: web, app: null, t: t };
   }
   function openOriginal(links) {
     if (!links.app) { window.location.replace(links.web); return; }
@@ -105,17 +105,36 @@
     setTimeout(function () { if (!left && !document.hidden) window.location.replace(links.web); }, 2500);
   }
 
-  function showResult(kind, title, text, links) {
+  // The whole original video, right here, starting a moment before the Short's part.
+  function player(id, t) {
+    if (!ID_RE.test(id) || !/^\d{1,6}$/.test(String(t))) return null;
+    var wrap = document.createElement("div"); wrap.className = "player";
+    var f = document.createElement("iframe");
+    f.src = "https://www.youtube-nocookie.com/embed/" + id + "?start=" + t +
+            "&autoplay=1&playsinline=1&rel=0&modestbranding=1";
+    f.title = "Full video";
+    f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
+    f.setAttribute("allowfullscreen", "");
+    f.referrerPolicy = "strict-origin-when-cross-origin";
+    wrap.appendChild(f);
+    return wrap;
+  }
+
+  function showResult(kind, title, text, links, clip) {
     var box = $("result");
     box.hidden = false;
     box.className = "result " + kind;
     box.textContent = "";
     var b = document.createElement("b"); b.textContent = title; box.appendChild(b);
     if (text) { var p = document.createElement("span"); p.textContent = text; box.appendChild(p); }
+    if (clip && links) {
+      var pl = player(clip.o, links.t);
+      if (pl) box.appendChild(pl);
+    }
     if (links) {
       var a = document.createElement("a");
       a.className = "btn main"; a.href = links.app || links.web; a.rel = "noopener";
-      a.textContent = links.app ? "Open in YouTube ▶" : "Open the original ▶";
+      a.textContent = links.app ? "Open in the YouTube app ▶" : "Watch on YouTube ▶";
       box.appendChild(document.createElement("br")); box.appendChild(a);
       if (links.app) {
         var w = document.createElement("a");
@@ -130,20 +149,15 @@
     var links = targetOf(clip);
     if (!links) { showResult("miss", "That clip's original link looks broken.", ""); return; }
     var label = (clip.source_title || clip.title || "") + (clip.creator ? " — " + clip.creator : "");
-    if (PHONE) {
-      mood("excited", "Found it! Tap the button to open YouTube.");
-      showResult("ok", "Found it!", label, links);
-      var btn = $("result").querySelector(".btn.main");
-      if (btn) {
-        btn.addEventListener("click", function () { count("go/" + clip.s, true, clip.title); });
-        btn.scrollIntoView({ block: "center", behavior: "smooth" });
-      }
-      return;
-    }
+    // The whole original plays right here (from the Short's moment). The button below opens
+    // it in the YouTube app / on YouTube instead — a real tap, which phones need for the app.
     count("go/" + clip.s, true, clip.title);
-    mood("excited", "Found it! Taking you there…");
-    showResult("ok", "Found it!", label, links);
-    setTimeout(function () { openOriginal(links); }, how === "auto" ? 350 : 700);
+    mood("excited", "Found it! Here's the full video.");
+    showResult("ok", "Found it — the full video:", label, links, clip);
+    var btn = $("result").querySelector(".btn.main");
+    if (btn) btn.addEventListener("click", function () { count("app/" + clip.s, true, clip.title); });
+    var pl = $("result").querySelector(".player");
+    (pl || $("result")).scrollIntoView({ block: "start", behavior: how === "auto" ? "auto" : "smooth" });
   }
 
   function lookup(raw, how) {
@@ -220,18 +234,10 @@
       var meta = document.createElement("div"); meta.className = "meta";
       var t = document.createElement("div"); t.className = "t"; t.textContent = c.title || "Clip";
       var cr = document.createElement("div"); cr.className = "c"; cr.textContent = c.creator || "";
-      var b;
-      var lk = targetOf(c);
-      if (PHONE && lk) {
-        // a real link: the tap itself opens the YouTube app
-        b = document.createElement("a"); b.className = "btn small"; b.rel = "noopener";
-        b.href = lk.app || lk.web;
-        b.addEventListener("click", function () { count("go/" + c.s, true, c.title); });
-      } else {
-        b = document.createElement("button"); b.type = "button"; b.className = "btn small";
-        b.addEventListener("click", function () { go(c, "click"); window.scrollTo({ top: 0, behavior: "smooth" }); });
-      }
-      b.textContent = "Watch original ▶";
+      // The full video plays at the top of the page (with an "Open in the YouTube app" link).
+      var b = document.createElement("button"); b.type = "button"; b.className = "btn small";
+      b.addEventListener("click", function () { $("link").value = "https://youtube.com/shorts/" + c.s; go(c, "click"); });
+      b.textContent = "Watch full video ▶";
       meta.appendChild(t); if (c.creator) meta.appendChild(cr); meta.appendChild(b);
       card.appendChild(th); card.appendChild(meta); list.appendChild(card);
     });
@@ -259,6 +265,9 @@
   }
 
   document.addEventListener("DOMContentLoaded", function () {
+    var ex = $("howtoEx");
+    if (ex) ex.textContent = window.location.origin + window.location.pathname.replace(/[^\/]*$/, "") +
+                             "https://youtube.com/shorts/…";
     $("finder").addEventListener("submit", function (e) { e.preventDefault(); if (data) lookup($("link").value, "submit"); });
     $("pasteBtn").addEventListener("click", function () {
       if (navigator.clipboard && navigator.clipboard.readText) {
@@ -275,7 +284,14 @@
     load().then(function () {
       count("/", false, document.title);
       renderFilters(); renderList();
-      var s = new URLSearchParams(window.location.search).get("s");
+      var q = new URLSearchParams(window.location.search);
+      var s = q.get("s") || q.get("u") || q.get("url") || q.get("v") || "";
+      if (!s) {           // a link pasted right after the address: ?https://… or #https://…
+        var raw = "";
+        try { raw = decodeURIComponent(window.location.search.slice(1) + " " + window.location.hash.slice(1)); }
+        catch (e) { raw = window.location.search.slice(1) + " " + window.location.hash.slice(1); }
+        s = extractId(raw.trim()) || "";
+      }
       if (s) { $("link").value = s; lookup(s, "auto"); }
       else mood("hello", data.clips.length ? "Hey! Paste a Short's link and I'll find the full video."
                                          : "Hey! Clips are coming soon.");
