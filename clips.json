@@ -1,6 +1,6 @@
 {
  "v": 2,
- "updated": "2026-11-24T10:40:30Z",
+ "updated": "2026-11-24T10:46:04Z",
  "channel": {
   "title": "Dark Wolf PlayZ",
   "url": "https://www.youtube.com/channel/UC2cCOweXSSb-o-y6JBDT1Xw",
@@ -15,6 +15,61 @@
   }
  },
  "clips": [
+  {
+   "short": {
+    "id": "q1wIg5Cg-Hs",
+    "title": "GTA 6 Jason's crazy tactical reload detail by T5G",
+    "posted": "2026-11-24T10:43:10Z"
+   },
+   "original": {
+    "id": "jdaixJMV7L8",
+    "start": 241
+   }
+  },
+  {
+   "short": {
+    "id": "mluX8a5ISNI",
+    "title": "GTA 6's secret snake detail will blow your mind 🐍",
+    "posted": "2026-11-24T10:42:53Z"
+   },
+   "original": {
+    "id": "jdaixJMV7L8",
+    "start": 572
+   }
+  },
+  {
+   "short": {
+    "id": "dZGumo3lio4",
+    "title": "T5G gets furious at game-breaking GTA 6 bug",
+    "posted": "2026-11-24T10:42:49Z"
+   },
+   "original": {
+    "id": "jdaixJMV7L8",
+    "start": 469
+   }
+  },
+  {
+   "short": {
+    "id": "LIIfhCtl1uc",
+    "title": "GTA 6 has wild roadkill details 🦌🚗",
+    "posted": "2026-11-24T10:42:24Z"
+   },
+   "original": {
+    "id": "jdaixJMV7L8",
+    "start": 678
+   }
+  },
+  {
+   "short": {
+    "id": "_6TQEr1hJqg",
+    "title": "GTA 6 dump trucks have INSANE working physics 🤯",
+    "posted": "2026-11-24T10:40:38Z"
+   },
+   "original": {
+    "id": "jdaixJMV7L8",
+    "start": 399
+   }
+  },
   {
    "short": {
     "id": "6DusPBCwZ5E",
