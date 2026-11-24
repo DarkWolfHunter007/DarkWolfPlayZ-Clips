@@ -1,6 +1,6 @@
 {
  "v": 2,
- "updated": "2026-11-23T19:51:26Z",
+ "updated": "2026-11-24T10:34:23Z",
  "channel": {
   "title": "Dark Wolf PlayZ",
   "url": "https://www.youtube.com/channel/UC2cCOweXSSb-o-y6JBDT1Xw",
@@ -8,6 +8,34 @@
  },
  "counter": "",
  "lead": 5,
- "originals": {},
- "clips": []
+ "originals": {
+  "jdaixJMV7L8": {
+   "title": "50 INSANE Details In GTA 6",
+   "creator": "T5G"
+  }
+ },
+ "clips": [
+  {
+   "short": {
+    "id": "fcNJ8JVPyxE",
+    "title": "GTA 6 car details you actually missed 🚗",
+    "posted": "2026-11-24T10:34:20Z"
+   },
+   "original": {
+    "id": "jdaixJMV7L8",
+    "start": 712
+   }
+  },
+  {
+   "short": {
+    "id": "lUnO01fGEQY",
+    "title": "T5G reveals why GTA 6 physics are TOO realistic 🏀🚗",
+    "posted": "2026-11-24T10:34:07Z"
+   },
+   "original": {
+    "id": "jdaixJMV7L8",
+    "start": 29
+   }
+  }
+ ]
 }
