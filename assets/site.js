@@ -1,4 +1,4 @@
-/* DarkWolfPlayZ sources page. Generated and published by the shorts pipeline — edits made
+/* Wolf Clips sources page. Generated and published by the shorts pipeline — edits made
    directly in the public repo are overwritten on the next sync.
 
    Safety rules this file keeps:
