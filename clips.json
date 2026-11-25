@@ -1,6 +1,6 @@
 {
  "v": 2,
- "updated": "2026-11-25T08:06:35Z",
+ "updated": "2026-11-25T23:07:06Z",
  "channel": {
   "title": "Wolf Clips",
   "url": "https://www.youtube.com/channel/UC2cCOweXSSb-o-y6JBDT1Xw",
@@ -15,6 +15,17 @@
   }
  },
  "clips": [
+  {
+   "short": {
+    "id": "z-vMTRbbF7g",
+    "title": "GTA 6 bridges actually make you wait 🌉",
+    "posted": "2026-11-25T23:00:00Z"
+   },
+   "original": {
+    "id": "jdaixJMV7L8",
+    "start": 434
+   }
+  },
   {
    "short": {
     "id": "1euoCI80bro",
