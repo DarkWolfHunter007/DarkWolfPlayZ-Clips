@@ -1,6 +1,6 @@
 {
  "v": 2,
- "updated": "2026-11-25T23:07:06Z",
+ "updated": "2026-11-26T00:37:06Z",
  "channel": {
   "title": "Wolf Clips",
   "url": "https://www.youtube.com/channel/UC2cCOweXSSb-o-y6JBDT1Xw",
@@ -9,12 +9,27 @@
  "counter": "",
  "lead": 5,
  "originals": {
+  "CDdTVeyjYak": {
+   "title": "Doctor Reacts to Family Guy Medical Scenes",
+   "creator": "Doctor Mike"
+  },
   "jdaixJMV7L8": {
    "title": "50 INSANE Details In GTA 6",
    "creator": "T5G"
   }
  },
  "clips": [
+  {
+   "short": {
+    "id": "aGAkZPPs14A",
+    "title": "Doctor Mike shocked by Peter Griffin's ridiculous bacon excuse 🩺",
+    "posted": "2026-11-26T00:30:00Z"
+   },
+   "original": {
+    "id": "CDdTVeyjYak",
+    "start": 511
+   }
+  },
   {
    "short": {
     "id": "z-vMTRbbF7g",
