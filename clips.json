@@ -1,6 +1,6 @@
 {
  "v": 2,
- "updated": "2026-11-27T02:07:06Z",
+ "updated": "2026-11-27T23:07:04Z",
  "channel": {
   "title": "Wolf Clips",
   "url": "https://www.youtube.com/channel/UC2cCOweXSSb-o-y6JBDT1Xw",
@@ -9,6 +9,10 @@
  "counter": "",
  "lead": 5,
  "originals": {
+  "cmaCran_Kc8": {
+   "title": "Busting 21 MYTHS In GTA 6",
+   "creator": "Jelly"
+  },
   "vqhlzkczpWo": {
    "title": "Family Guy - Dark Humor Compilation | How Do They Get Away With Some of These Jokes?! | Reaction",
    "creator": "Cliff Beats"
@@ -23,6 +27,17 @@
   }
  },
  "clips": [
+  {
+   "short": {
+    "id": "RzaCLsnq3go",
+    "title": "Jelly finds the Ocean View Hotel in GTA 6",
+    "posted": "2026-11-27T23:00:00Z"
+   },
+   "original": {
+    "id": "cmaCran_Kc8",
+    "start": 471
+   }
+  },
   {
    "short": {
     "id": "YWHokKW6SBE",
