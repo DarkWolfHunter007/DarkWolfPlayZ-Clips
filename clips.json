@@ -1,6 +1,6 @@
 {
  "v": 2,
- "updated": "2026-11-27T23:07:04Z",
+ "updated": "2026-11-28T00:37:05Z",
  "channel": {
   "title": "Wolf Clips",
   "url": "https://www.youtube.com/channel/UC2cCOweXSSb-o-y6JBDT1Xw",
@@ -9,6 +9,10 @@
  "counter": "",
  "lead": 5,
  "originals": {
+  "q-ANvqivX60": {
+   "title": "Zack.D Film Vs Original Videos",
+   "creator": "IM Sports"
+  },
   "cmaCran_Kc8": {
    "title": "Busting 21 MYTHS In GTA 6",
    "creator": "Jelly"
@@ -27,6 +31,17 @@
   }
  },
  "clips": [
+  {
+   "short": {
+    "id": "9NWf_L2EUoU",
+    "title": "IM Sports reacts to Zack.D Film's darkest animation 💀",
+    "posted": "2026-11-28T00:30:00Z"
+   },
+   "original": {
+    "id": "q-ANvqivX60",
+    "start": 146
+   }
+  },
   {
    "short": {
     "id": "RzaCLsnq3go",
